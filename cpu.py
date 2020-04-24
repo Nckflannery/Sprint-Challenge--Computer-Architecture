@@ -2,6 +2,7 @@
 
 import sys
 
+# Could define all of these in the branchtable!
 CALL = 0b01010000
 HLT = 0b00000001
 JEQ = 0b01010101
@@ -189,15 +190,27 @@ class CPU:
         """ALU operations."""
 
         if op == ADD:
+            '''
+            Set value in reg_A to sum of values of reg_A and reg_B
+            '''
             self.register[reg_a] += self.register[reg_b]
         
         elif op == ADDI:
+            '''
+            Set value of reg_A to sum of values of reg_A and immediate input
+            '''
             self.register[reg_a] += reg_b
 
         elif op == AND:
+            '''
+            Set register A to reg_A AND reg_B
+            '''
             self.register[reg_a] &= self.register[reg_b]
 
         elif op == CMP:
+            '''
+            Set flag for Equal, Lesser, or Greater
+            '''
             op_a = self.register[reg_a]
             op_b = self.register[reg_b]
             if op_a == op_b:
@@ -208,36 +221,63 @@ class CPU:
                 self.fl = 0b00000010
 
         elif op == DIV:
+            '''
+            Set value of reg_A to reg_A/reg_B (if reg_B != 0)
+            '''
             if self.register[reg_b] != 0:
                 self.register[reg_a] /= self.register[reg_b]
             else:
                 raise Exception("Cannot divide by 0")
         
         elif op == MOD:
+            '''
+            Set value of reg_A to remainder of reg_A/reg_B (if reg_B !=0)
+            '''
             if self.register[reg_b] != 0:
                 self.register[reg_a] %= self.register[reg_b]
             else:
                 raise Exception('Cannot divide by 0')
 
         elif op == MUL:
+            '''
+            Set value of reg_A to reg_A * reg_B
+            '''
             self.register[reg_a] *= self.register[reg_b]
         
         elif op == NOT:
+            '''
+            Set value of reg_A to NOT reg_A
+            '''
             self.register[reg_a] ^= 0b11111111
         
         elif op == OR:
+            '''
+            Set value of reg_A to reg_A OR reg_B
+            '''
             self.register[reg_a] |= self.register[reg_b]
 
         elif op == SHL:
+            '''
+            Set value of reg_A to reg_A LEFT shit reg_B
+            '''
             self.register[reg_a] <<= self.register[reg_b]
 
         elif op == SHR:
+            '''
+            Set value of reg_A to reg_A RIGHT shit reg_B
+            '''
             self.register[reg_a] >>= self.register[reg_b]
 
         elif op == SUB:
+            '''
+            Set value of reg_A to reg_A - reg_B
+            '''
             self.register[reg_a] -= self.register[reg_b]
 
         elif op == XOR:
+            '''
+            Set value of reg_A to reg_A EXCLUSIVE OR reg_B
+            '''
             self.register[reg_a] ^= self.register[reg_b]
 
         else:
