@@ -15,11 +15,18 @@ PUSH = 0b01000101
 RET = 0b00010001
 ST = 0b10000100
 # ALU ops
-MUL = 0b10100010
 ADD = 0b10100000
-DIV = 0b10100011
-SUB = 0b10100001
+AND = 0b10101000
 CMP = 0b10100111
+DIV = 0b10100011
+MOD = 0b10100100
+MUL = 0b10100010
+NOT = 0b01101001
+OR = 0b10101010
+SHL = 0b10101100
+SHR = 0b10101101
+SUB = 0b10100001
+XOR = 0b10101011
 SP = 7
 
 class CPU:
@@ -45,11 +52,18 @@ class CPU:
             PUSH : self.push,
             RET : self.ret,
             ST : self.st,
-            MUL : self.alu,
             ADD : self.alu,
+            AND : self.alu,
+            CMP : self.alu,
             DIV : self.alu,
+            MOD : self.alu,
+            MUL : self.alu,
+            NOT : self.alu,
+            OR : self.alu,
+            SHL : self.alu,
+            SHR : self.alu,
             SUB : self.alu,
-            CMP : self.alu
+            XOR : self.alu
         }
     
     def call(self, op_a, op_b=None):
@@ -174,15 +188,10 @@ class CPU:
 
         if op == ADD:
             self.register[reg_a] += self.register[reg_b]
-        elif op == SUB:
-            self.register[reg_a] -= self.register[reg_b]
-        elif op == MUL:
-            self.register[reg_a] *= self.register[reg_b]
-        elif op == DIV:
-            if self.register[reg_b] != 0:
-                self.register[reg_a] /= self.register[reg_b]
-            else:
-                raise Exception("Cannot divide by 0")
+
+        elif op == AND:
+            self.register[reg_a] &= self.register[reg_b]
+
         elif op == CMP:
             op_a = self.register[reg_a]
             op_b = self.register[reg_b]
@@ -192,6 +201,40 @@ class CPU:
                 self.fl = 0b00000100
             elif op_a > op_b:
                 self.fl = 0b00000010
+
+        elif op == DIV:
+            if self.register[reg_b] != 0:
+                self.register[reg_a] /= self.register[reg_b]
+            else:
+                raise Exception("Cannot divide by 0")
+        
+        elif op == MOD:
+            if self.register[reg_b] != 0:
+                self.register[reg_a] %= self.register[reg_b]
+            else:
+                raise Exception('Cannot divide by 0')
+
+        elif op == MUL:
+            self.register[reg_a] *= self.register[reg_b]
+        
+        elif op == NOT:
+            self.register[reg_a] ^= 0b11111111
+        
+        elif op == OR:
+            self.register[reg_a] |= self.register[reg_b]
+
+        elif op == SHL:
+            self.register[reg_a] <<= self.register[reg_b]
+
+        elif op == SHR:
+            self.register[reg_a] >>= self.register[reg_b]
+
+        elif op == SUB:
+            self.register[reg_a] -= self.register[reg_b]
+
+        elif op == XOR:
+            self.register[reg_a] ^= self.register[reg_b]
+
         else:
             raise Exception("Unsupported ALU operation")
 
