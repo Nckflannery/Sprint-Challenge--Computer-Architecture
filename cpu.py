@@ -16,6 +16,7 @@ RET = 0b00010001
 ST = 0b10000100
 # ALU ops
 ADD = 0b10100000
+ADDI = 0b10100101
 AND = 0b10101000
 CMP = 0b10100111
 DIV = 0b10100011
@@ -53,6 +54,7 @@ class CPU:
             RET : self.ret,
             ST : self.st,
             ADD : self.alu,
+            ADDI : self.alu,
             AND : self.alu,
             CMP : self.alu,
             DIV : self.alu,
@@ -188,6 +190,9 @@ class CPU:
 
         if op == ADD:
             self.register[reg_a] += self.register[reg_b]
+        
+        elif op == ADDI:
+            self.register[reg_a] += reg_b
 
         elif op == AND:
             self.register[reg_a] &= self.register[reg_b]
